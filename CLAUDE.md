@@ -1,0 +1,345 @@
+    # WordPress Claude Code Wizard - Complete Workflow & Development Guide
+
+     ## 🚀 Quick Deploy Workflow
+
+     When a user clones this repository and wants to deploy WordPress to Digital Ocean,
+     execute these commands in order:
+
+     ```bash
+     # 1. Setup environment
+     cp .env.example .env
+     # User must edit .env and add DO_API_TOKEN
+
+     # 2. Install Python dependencies
+     pip3 install python-dotenv requests
+
+     # 3. Start local WordPress
+     docker-compose up -d
+
+     # 4. Setup SSH keys (one-time)
+     ./setup_ssh_and_deploy.sh
+
+     # 5. Create Digital Ocean droplet
+     python3 create_droplet_with_ssh.py
+
+     # 6. Wait for installation (5-10 minutes)
+     sleep 300
+
+     # 7. Migrate local WordPress to droplet
+     ./migrate_now.sh
+     ```
+
+     ## 📁 Project Structure
+
+     ```
+     wordpress-claude-code-wizard/
+     ├── .env                          # DO_API_TOKEN goes here
+     ├── docker-compose.yml            # Local WordPress environment
+     ├── Dockerfile                    # Custom Apache/PHP image
+     ├── wp-config.php                # Environment-aware configuration
+     ├── setup_ssh_and_deploy.sh      # SSH key automation
+     ├── create_droplet_with_ssh.py   # Droplet creation script
+     ├── migrate_now.sh               # Migration script
+     └── wp-content/
+         ├── themes/
+         │   └── my-custom-theme/     # Starter theme
+         └── plugins/
+             └── custom-post-types/    # CPT plugin
+     ```
+
+     ## 🎨 WordPress Development Guide
+
+     ### Theme Development
+
+     Users can modify the custom theme in `wp-content/themes/my-custom-theme/`:
+
+     ```bash
+     # Create new page template
+     cat > wp-content/themes/my-custom-theme/page-about.php << 'EOF'
+     <?php
+     /* Template Name: About Page */
+     get_header();
+     ?>
+     <main class="site-main">
+         <div class="container">
+             <h1><?php the_title(); ?></h1>
+             <?php the_content(); ?>
+         </div>
+     </main>
+     <?php get_footer(); ?>
+     EOF
+
+     # Create custom single post template
+     cat > wp-content/themes/my-custom-theme/single.php << 'EOF'
+     <?php get_header(); ?>
+     <main class="site-main">
+         <article>
+             <h1><?php the_title(); ?></h1>
+             <div class="meta">Posted on <?php echo get_the_date(); ?></div>
+             <?php the_content(); ?>
+         </article>
+     </main>
+     <?php get_footer(); ?>
+     EOF
+
+     # Create archive template
+     cat > wp-content/themes/my-custom-theme/archive.php << 'EOF'
+     <?php get_header(); ?>
+     <main class="site-main">
+         <h1><?php the_archive_title(); ?></h1>
+         <?php while (have_posts()) : the_post(); ?>
+             <article>
+                 <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                 <?php the_excerpt(); ?>
+             </article>
+         <?php endwhile; ?>
+     </main>
+     <?php get_footer(); ?>
+     EOF
+     ```
+
+     ### Adding Navigation Menus
+
+     Add to `wp-content/themes/my-custom-theme/functions.php`:
+
+     ```php
+     // Register multiple menu locations
+     register_nav_menus(array(
+         'primary' => __('Primary Menu', 'my-custom-theme'),
+         'footer' => __('Footer Menu', 'my-custom-theme'),
+         'social' => __('Social Links Menu', 'my-custom-theme'),
+     ));
+
+     // Add menu support
+     add_theme_support('menus');
+     ```
+
+     Display menus in theme templates:
+
+     ```php
+     // In header.php
+     <?php wp_nav_menu(array('theme_location' => 'primary')); ?>
+
+     // In footer.php
+     <?php wp_nav_menu(array('theme_location' => 'footer')); ?>
+     ```
+
+     ### WP-CLI Commands (Inside Docker Container)
+
+     ```bash
+     # Access the WordPress container
+     docker exec -it wp-dev bash
+
+     # Install WP-CLI (if not already installed)
+     curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+     chmod +x wp-cli.phar
+     mv wp-cli.phar /usr/local/bin/wp
+
+     # Create pages
+     wp post create --post_type=page --post_title='Home' --post_status=publish
+     wp post create --post_type=page --post_title='About Us' --post_status=publish
+     wp post create --post_type=page --post_title='Services' --post_status=publish
+     wp post create --post_type=page --post_title='Contact' --post_status=publish
+     wp post create --post_type=page --post_title='Blog' --post_status=publish
+
+     # Set static homepage
+     wp option update page_on_front 2  # Use page ID
+     wp option update show_on_front page
+     wp option update page_for_posts 5  # Blog page ID
+
+     # Create menu
+     wp menu create "Main Menu"
+     wp menu location assign main-menu primary
+     wp menu item add-post main-menu 2  # Add pages to menu
+     wp menu item add-post main-menu 3
+     wp menu item add-post main-menu 4
+
+     # Install popular plugins
+     wp plugin install contact-form-7 --activate
+     wp plugin install wordpress-seo --activate
+     wp plugin install elementor --activate
+     wp plugin install woocommerce --activate
+     wp plugin install updraftplus --activate
+
+     # Create users
+     wp user create john john@example.com --role=editor --user_pass=password123
+     wp user create jane jane@example.com --role=author --user_pass=password123
+
+     # Update site options
+     wp option update blogname "My Awesome Site"
+     wp option update blogdescription "A WordPress site built with Claude Code Wizard"
+     wp option update timezone_string "America/New_York"
+
+     # Set permalinks
+     wp rewrite structure '/%postname%/'
+     wp rewrite flush
+     ```
+
+     ### Custom Post Types
+
+     The included plugin already creates Portfolio and Testimonial post types. To add
+     more:
+
+     ```php
+     // Add to wp-content/plugins/custom-post-types/custom-post-types.php
+
+     public function register_team_post_type() {
+         $args = array(
+             'labels' => array(
+                 'name' => 'Team Members',
+                 'singular_name' => 'Team Member',
+             ),
+             'public' => true,
+             'has_archive' => true,
+             'supports' => array('title', 'editor', 'thumbnail'),
+             'menu_icon' => 'dashicons-groups',
+             'show_in_rest' => true,
+         );
+         register_post_type('team', $args);
+     }
+     // Add to __construct(): add_action('init', array($this,
+     'register_team_post_type'));
+     ```
+
+     ### Advanced Theme Features
+
+     ```php
+     // Add to functions.php
+
+     // Custom image sizes
+     add_theme_support('post-thumbnails');
+     add_image_size('hero', 1920, 600, true);
+     add_image_size('team-member', 400, 400, true);
+
+     // Widget areas
+     function my_widgets_init() {
+         register_sidebar(array(
+             'name' => 'Homepage Widgets',
+             'id' => 'homepage-widgets',
+             'before_widget' => '<div class="widget">',
+             'after_widget' => '</div>',
+         ));
+     }
+     add_action('widgets_init', 'my_widgets_init');
+
+     // Custom logo support
+     add_theme_support('custom-logo', array(
+         'height' => 100,
+         'width' => 400,
+         'flex-height' => true,
+         'flex-width' => true,
+     ));
+
+     // Gutenberg support
+     add_theme_support('align-wide');
+     add_theme_support('editor-styles');
+     add_theme_support('wp-block-styles');
+     ```
+
+     ## 🔧 Troubleshooting Commands
+
+     ```bash
+     # Check if Docker containers are running
+     docker ps | grep wp-
+
+     # View Docker logs
+     docker-compose logs wordpress
+
+     # Restart containers
+     docker-compose restart
+
+     # Access MySQL directly
+     docker exec -it wp-mysql mysql -u wordpress -pwordpress_password wordpress
+
+     # Check droplet status
+     cat .droplet_info | python3 -m json.tool
+
+     # SSH to droplet
+     ssh -i ~/.ssh/wordpress_deploy root@$(cat .droplet_info | python3 -c "import
+     json,sys; print(json.load(sys.stdin)['ip_address'])")
+
+     # View WordPress error logs on droplet
+     ssh -i ~/.ssh/wordpress_deploy root@YOUR_IP "tail -f /var/log/apache2/error.log"
+
+     # Check cloud-init status
+     ssh -i ~/.ssh/wordpress_deploy root@YOUR_IP "cloud-init status"
+
+     # Delete droplet (cleanup)
+     python3 -c "
+     import requests, json, os
+     api_token = os.getenv('DO_API_TOKEN')
+     with open('.droplet_info') as f:
+         droplet_id = json.load(f)['droplet_id']
+     headers = {'Authorization': f'Bearer {api_token}'}
+     response =
+     requests.delete(f'https://api.digitalocean.com/v2/droplets/{droplet_id}',
+     headers=headers)
+     print('Droplet deleted' if response.status_code == 204 else 'Failed')
+     "
+     ```
+
+     ## 📊 Production Deployment Checklist
+
+     Before deploying to production:
+
+     1. ✅ Update passwords in wp-config.php
+     2. ✅ Set WP_DEBUG to false
+     3. ✅ Update salts (automatic during migration)
+     4. ✅ Install SSL certificate (certbot --apache)
+     5. ✅ Configure domain DNS
+     6. ✅ Enable firewall (ufw)
+     7. ✅ Set up backups
+     8. ✅ Configure email settings
+
+     ## 🎯 Complete Workflow Summary
+
+     1. **Clone repo** → Get complete WordPress development environment
+     2. **Docker up** → Local WordPress running instantly
+     3. **Develop** → Theme, plugins, content - everything
+     4. **Setup SSH** → One-time automated key configuration
+     5. **Create droplet** → Automated via API with WordPress installation
+     6. **Migrate** → Transfer everything to production
+     7. **Point domain** → Update DNS A record
+     8. **SSL** → Run certbot for HTTPS
+     9. **Live** → Production WordPress site running!
+
+     ## 💡 Key Features This Provides
+
+     - **Zero DevOps knowledge required** - Just need DO API token
+     - **Perfect environment parity** - Docker matches production exactly
+     - **Complete WordPress control** - Full admin access, all features
+     - **Real VPS** - Not shared hosting, full server control
+     - **One-command deployment** - Actually automated, not marketing speak
+     - **Cost effective** - $6/month for production site
+     - **No vendor lock-in** - Standard WordPress on standard Ubuntu
+     - **Version controlled** - Everything in Git
+     - **Instant local development** - Changes visible immediately
+     - **Professional workflow** - Local → Staging → Production capable
+
+     ## 🚨 Important Notes
+
+     - Always test locally before deploying
+     - Keep backups of production database
+     - Use strong passwords in production
+     - Update WordPress, themes, and plugins regularly
+     - Monitor server resources on Digital Ocean
+     - The migration script replaces the entire WordPress installation
+     - Custom plugins/themes in wp-content are preserved
+     - Database is completely replaced with local version
+
+     ## 🔄 Updating Production Site
+
+     To update your production site after local changes:
+
+     ```bash
+     # Make changes locally
+     # Test everything at http://localhost
+
+     # Re-run migration to update production
+     ./migrate_now.sh
+
+     # Your production site is now updated with all local changes
+     ```
+
+     This is a complete local-to-production WordPress development and deployment
+     pipeline that doesn't exist anywhere else in this form!
