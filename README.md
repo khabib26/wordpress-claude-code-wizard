@@ -10,8 +10,9 @@ Automated WordPress development and deployment pipeline for Digital Ocean. Devel
 - **One-Click Deployment**: Automated migration script to Digital Ocean
 - **Environment-Aware Config**: wp-config.php works on both local and production
 
-- Try SEO Grove: (SEO Grove)[https://seogrove.ai/pre-registration]
-- Join my Skool to say thanks: (My Skool)[https://www.skool.com/iss-ai-automation-school-6342]
+- Try SEO Grove: [SEO Grove](https://seogrove.ai/pre-registration)  
+- Join my Skool to say thanks: [My Skool](https://www.skool.com/iss-ai-automation-school-6342)
+
 
 ## Quick Start
 
