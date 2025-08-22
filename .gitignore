@@ -1,0 +1,39 @@
+# Environment variables
+.env
+.env.local
+
+# Credentials
+.droplet_info
+
+# WordPress files
+wp-content/uploads/*
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backup*/
+
+# Database
+*.sql
+mysql_data/
+
+# Docker volumes
+wordpress_data/
+db_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+wp-content/debug.log
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
