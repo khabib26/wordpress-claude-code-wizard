@@ -4,6 +4,7 @@
 
 # Credentials
 .droplet_info
+.ssh_key_id
 
 # WordPress files
 wp-content/uploads/*

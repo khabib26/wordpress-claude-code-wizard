@@ -1,6 +1,6 @@
-# WordPress Development Environment for Digital Ocean
+# WordPress Claude Code Wizard 🚀
 
-This is a Docker-based WordPress development environment that **exactly mirrors Digital Ocean's WordPress droplet**, ensuring seamless deployment.
+Automated WordPress development and deployment pipeline for Digital Ocean. Develop locally with Docker, deploy to production with one command.
 
 ## Features
 
@@ -12,20 +12,38 @@ This is a Docker-based WordPress development environment that **exactly mirrors 
 
 ## Quick Start
 
-1. **Start the development environment:**
+### 1. Setup Environment
 ```bash
-docker-compose up -d
+# Clone the repository
+git clone https://github.com/IncomeStreamSurfer/wordpress-claude-code-wizard.git
+cd wordpress-claude-code-wizard
+
+# Copy and configure .env
+cp .env.example .env
+# Edit .env and add your Digital Ocean API token
 ```
 
-2. **Access your sites:**
-- WordPress: http://localhost
-- phpMyAdmin: http://localhost:8080
+### 2. Local Development
+```bash
+# Start WordPress locally
+docker-compose up -d
 
-3. **Initial WordPress setup:**
-- Go to http://localhost
-- Follow the WordPress installation wizard
-- Activate your custom theme: `My Custom Theme`
-- Activate the plugin: `Custom Post Types`
+# Access at http://localhost
+# phpMyAdmin at http://localhost:8080
+```
+
+### 3. Deploy to Digital Ocean
+```bash
+# One-time SSH setup
+./setup_ssh_and_deploy.sh
+
+# Create droplet and deploy
+python3 create_droplet_with_ssh.py
+
+# Wait 5-10 minutes for installation
+# Then migrate your local WordPress
+./migrate_now.sh
+```
 
 ## Development Workflow
 
@@ -37,46 +55,33 @@ docker-compose up -d
 - Plugin files: `wp-content/plugins/custom-post-types/`
 - After activation, you'll see Portfolio and Testimonials in the admin menu
 
-## Deploying to Digital Ocean
+## Post-Deployment
 
-### 1. Create a Digital Ocean Droplet
-- Choose: WordPress on Ubuntu 22.04
-- Select your preferred size (minimum 1GB RAM)
-- Note your droplet's IP address
-
-### 2. Run the Migration Script
-```bash
-./deploy-to-digitalocean.sh
-```
-
-The script will:
-- Export your local database
-- Package your wp-content
-- Transfer everything to DO
-- Configure the database
-- Set proper permissions
-- Generate security keys
-
-### 3. Post-Deployment
 After deployment:
-1. Visit `http://YOUR_DROPLET_IP/wp-admin`
-2. Update permalinks: Settings → Permalinks → Save
-3. Set up SSL: `ssh root@YOUR_IP` then `certbot --apache`
-4. Point your domain to the droplet IP
+1. Your site is live at `http://YOUR_DROPLET_IP`
+2. Point your domain's A record to the droplet IP
+3. Set up SSL: 
+   ```bash
+   ssh -i ~/.ssh/wordpress_deploy root@YOUR_IP
+   certbot --apache
+   ```
 
 ## File Structure
 ```
 .
-├── docker-compose.yml       # Docker configuration
-├── Dockerfile              # Custom Apache/PHP image
-├── wp-config.php          # Environment-aware config
-├── .htaccess             # Apache rules
+├── docker-compose.yml              # Docker configuration
+├── Dockerfile                      # Custom Apache/PHP image
+├── wp-config.php                   # Environment-aware config
+├── .htaccess                       # Apache rules
+├── setup_ssh_and_deploy.sh         # SSH key setup
+├── create_droplet_with_ssh.py      # Droplet creation
+├── migrate_now.sh                  # Migration script
 ├── wp-content/
 │   ├── themes/
-│   │   └── my-custom-theme/    # Your custom theme
+│   │   └── my-custom-theme/        # Your custom theme
 │   └── plugins/
-│       └── custom-post-types/  # CPT plugin
-└── deploy-to-digitalocean.sh   # Migration script
+│       └── custom-post-types/      # CPT plugin
+└── .claude/                        # Claude's workflow memory
 ```
 
 ## Database Access
@@ -89,24 +94,12 @@ After deployment:
 
 **phpMyAdmin:** http://localhost:8080
 
-## Troubleshooting
+## Requirements
 
-### Container won't start
-```bash
-docker-compose down -v  # Remove volumes
-docker-compose up -d    # Start fresh
-```
-
-### Permission issues on Digital Ocean
-```bash
-ssh root@YOUR_IP
-chown -R www-data:www-data /var/www/html
-find /var/www/html -type d -exec chmod 755 {} \;
-find /var/www/html -type f -exec chmod 644 {} \;
-```
-
-### Database connection errors after migration
-Check `/var/www/html/wp-config.php` on your droplet and ensure the database credentials match.
+- Docker & Docker Compose
+- Python 3 with pip
+- Digital Ocean account with API token
+- 10-15 minutes for complete deployment
 
 ## Security Notes
 
@@ -115,6 +108,12 @@ Check `/var/www/html/wp-config.php` on your droplet and ensure the database cred
 - Enable firewall on Digital Ocean: `ufw allow 22,80,443/tcp && ufw enable`
 - Keep WordPress, themes, and plugins updated
 
-## Support
+## How It Works
 
-This setup ensures your local development environment is identical to Digital Ocean's WordPress droplet, making deployment seamless and predictable.
+1. **Docker** provides identical environment to production
+2. **SSH keys** are automatically configured for passwordless access
+3. **Cloud-init** installs WordPress on the droplet
+4. **Migration script** transfers your themes, plugins, and content
+5. **URL updates** are handled automatically
+
+From local development to live production in minutes!
