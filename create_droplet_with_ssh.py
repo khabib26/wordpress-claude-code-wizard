@@ -107,9 +107,29 @@ chown -R www-data:www-data /var/www/html
 find /var/www/html -type d -exec chmod 755 {{}} \\;
 find /var/www/html -type f -exec chmod 644 {{}} \\;
 
-# Enable Apache modules and restart
+# Enable Apache modules
 a2enmod rewrite
-systemctl restart apache2
+
+# Configure Apache virtual host with AllowOverride
+cat > /etc/apache2/sites-available/wordpress.conf <<'APACHECONF'
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+    
+    <Directory /var/www/html>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    ErrorLog ${{APACHE_LOG_DIR}}/error.log
+    CustomLog ${{APACHE_LOG_DIR}}/access.log combined
+</VirtualHost>
+APACHECONF
+
+# Enable the new site and disable default
+a2dissite 000-default.conf
+a2ensite wordpress.conf
 
 # Create .htaccess
 cat > /var/www/html/.htaccess <<'HTACCESS'
@@ -126,6 +146,15 @@ RewriteRule . /index.php [L]
 HTACCESS
 
 chown www-data:www-data /var/www/html/.htaccess
+chmod 644 /var/www/html/.htaccess
+
+# Install WP-CLI
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod +x wp-cli.phar
+mv wp-cli.phar /usr/local/bin/wp
+
+# Restart Apache with new configuration
+systemctl restart apache2
 
 # Mark as ready
 touch /root/.wordpress_ready

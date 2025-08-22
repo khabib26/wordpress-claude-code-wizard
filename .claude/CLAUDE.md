@@ -278,6 +278,40 @@
      "
      ```
 
+     ### 🚨 Fixing 404 Errors on Pages
+
+     If you encounter 404 errors on pages after deployment, the scripts now handle this
+     automatically. However, if you still have issues:
+
+     ```bash
+     # SSH to droplet
+     ssh -i ~/.ssh/wordpress_deploy root@YOUR_IP
+
+     # Check if permalinks are set correctly
+     wp --allow-root rewrite structure
+     
+     # Manually set permalinks and flush
+     wp --allow-root rewrite structure '/%postname%/'
+     wp --allow-root rewrite flush
+
+     # Verify Apache configuration
+     cat /etc/apache2/sites-enabled/wordpress.conf
+     # Should show: AllowOverride All
+
+     # Check .htaccess exists and is correct
+     cat /var/www/html/.htaccess
+     
+     # Restart Apache
+     systemctl restart apache2
+     ```
+
+     **Note:** The deployment scripts now automatically:
+     - Install WP-CLI on the server
+     - Configure Apache with AllowOverride All
+     - Set permalinks to /%postname%/
+     - Create proper .htaccess file
+     - Flush rewrite rules after migration
+
      ## 📊 Production Deployment Checklist
 
      Before deploying to production:

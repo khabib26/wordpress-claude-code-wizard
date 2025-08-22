@@ -61,6 +61,27 @@ chown -R www-data:www-data /var/www/html
 find /var/www/html -type d -exec chmod 755 {} \;
 find /var/www/html -type f -exec chmod 644 {} \;
 
+# Set permalinks and flush rewrite rules
+cd /var/www/html
+wp --allow-root rewrite structure '/%postname%/'
+wp --allow-root rewrite flush
+
+# Ensure .htaccess is writable and has correct rules
+chmod 664 /var/www/html/.htaccess
+cat > /var/www/html/.htaccess <<'HTACCESS'
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+HTACCESS
+chown www-data:www-data /var/www/html/.htaccess
+
 # Restart Apache
 systemctl restart apache2
 
