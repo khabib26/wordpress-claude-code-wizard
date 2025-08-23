@@ -1,5 +1,63 @@
     # WordPress Claude Code Wizard - Complete Workflow & Development Guide
 
+     ## 🎯 Main Workflow Process
+
+     When building and deploying a directory website, follow this exact workflow:
+
+     ### Phase 1: Research & Data Collection
+     1. **Use Jina AI to research the topic**
+        - Search for companies/tools using `s.jina.ai`
+        - Scrape individual pages with `r.jina.ai`
+        - Retry any failed scrapes
+     
+     2. **Create comprehensive JSON data**
+        - One detailed JSON for each directory entry
+        - Each entry should have extensive information
+     
+     3. **Collect royalty-free images**
+        - Search Unsplash via Jina: `s.jina.ai/?q=TERM+unsplash`
+        - Scrape Unsplash pages for non-premium images
+        - Store image URLs in the JSON data
+
+     ### Phase 2: Website Development
+     1. **Start with local WordPress Docker environment**
+        - Run `docker-compose up -d`
+        - Access at http://localhost
+     
+     2. **Build the custom theme**
+        - Create detailed, complex CSS (not simple/short)
+        - Implement all directory pages from JSON data
+        - Add comprehensive animations and interactions
+        - Ensure responsive design with multiple breakpoints
+     
+     3. **Import directory data**
+        - Create custom post types for directory entries
+        - Import JSON data into WordPress
+        - Set up taxonomy/category structure
+     
+     4. **Test thoroughly locally**
+        - Check all pages and permalinks
+        - Verify images load correctly
+        - Test responsive design
+
+     ### Phase 3: Deployment to Digital Ocean
+     1. **Setup infrastructure**
+        - Run `./setup_ssh_and_deploy.sh` (one-time SSH setup)
+        - Run `python3 create_droplet_with_ssh.py`
+        - Wait 5-10 minutes for installation
+     
+     2. **Migrate to production**
+        - Run `./migrate_now.sh`
+        - Verify custom theme transferred
+        - Check that permalinks work (auto-configured)
+     
+     3. **Final configuration**
+        - Point domain to droplet IP
+        - Install SSL certificate
+        - Configure backups
+
+     ---
+
      ## 📚 Directory Website Development
 
      ### Research Phase with Jina AI
@@ -18,8 +76,6 @@
 
      **Important Research Guidelines:**
      - Create detailed JSON for each directory page
-     - Store research in `/research/[technology]/page1/`, `/page2/`, etc.
-     - Each page gets its own .md file with comprehensive information
      - If a page 404s or doesn't scrape properly, retry the scrape
      - DO NOT use Jina to scrape CSS from design sites
 
