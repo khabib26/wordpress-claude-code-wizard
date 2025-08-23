@@ -136,7 +136,25 @@ The goal is to have a LIVE, WORKING website with all pages generated, all conten
         - Access at http://localhost
         - THIS IS WHERE YOUR WEBSITE WILL BE BUILT AND VISIBLE
      
-     2. **Build the complete, functional website**
+     2. **Build the complete, functional website with EXCEPTIONAL DESIGN**
+        
+        **Design Approach: Create a premium, polished design that fits the directory type**
+        
+        Think about what makes sense for this specific directory:
+        - Research successful websites in this niche to understand user expectations
+        - Match the visual aesthetic to what builds trust with your audience
+        - Choose typography that enhances readability and matches the tone
+        - Select a color palette that evokes the right emotions for the industry
+        - Add subtle animations and micro-interactions that feel premium
+        - Include thoughtful spacing and white space for visual breathing room
+        - Create custom graphics or icons that enhance understanding
+        - Ensure consistent visual language throughout every page
+        - Pay attention to small details that make the site feel polished
+        - Design with the mindset of a high-end agency creating a $50,000 website
+        - The design should immediately convey professionalism and trustworthiness
+        - Every element should feel intentional and well-crafted
+        
+        **Then build everything:**
         - Create ALL pages with full content (not placeholders)
         - Import ALL data and display it properly
         - BUILD all WordPress menus (header, footer, sidebar)
