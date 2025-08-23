@@ -1,23 +1,121 @@
-    # WordPress Claude Code Wizard - Complete Workflow & Development Guide
+# WordPress Claude Code Wizard - Complete Workflow & Development Guide
 
-     ## 🎯 Main Workflow Process
+## 🎯 Main Workflow Process
 
-     When building and deploying a directory website, follow this exact workflow:
+When building and deploying a directory website, follow this exact workflow:
 
-     ### Phase 1: Research & Data Collection
-     1. **Use Jina AI to research the topic**
-        - Search for companies/tools using `s.jina.ai`
-        - Scrape individual pages with `r.jina.ai`
-        - Retry any failed scrapes
+### Phase 1: Deep Research & Comprehensive Data Collection
+
+**Goal: Create information-rich pages with comprehensive content**
+
+1. **Research each individual entry exhaustively using Jina AI**
+   - Scrape the company's main website completely
+   - Find and scrape their pricing pages, feature lists, documentation
+   - Search for reviews, comparisons, alternatives
+   - Gather technical specifications, integrations, use cases
+   - Find case studies, success stories, testimonials
+   - Collect founder information, company history, funding details
+   - Get support options, contact methods, social media links
+   - Retry any failed scrapes until you have EVERYTHING
      
-     2. **Create comprehensive JSON data**
-        - One detailed JSON for each directory entry
-        - Each entry should have extensive information
+     2. **Build comprehensive JSON datasets for each entry**
+        Each individual page JSON should contain relevant information such as:
+        ```json
+        {
+          "basics": {
+            "name", "tagline", "description",
+            "founded", "headquarters", "employees", "funding"
+          },
+          "detailed_features": [
+            {"name", "description", "category", "importance"}
+          ],
+          "pricing": {
+            "model", "free_tier", "starter_price", "tiers": [
+              {"name", "price", "features", "limits", "best_for"}
+            ]
+          },
+          "use_cases": [
+            {"title", "description", "industry", "company_size"}
+          ],
+          "pros_cons": {
+            "pros": [{"title", "explanation"}],
+            "cons": [{"title", "explanation"}]
+          },
+          "integrations": [
+            {"name", "type", "description", "documentation_url"}
+          ],
+          "alternatives": [
+            {"name", "comparison", "when_to_choose"}
+          ],
+          "reviews": {
+            "average_rating", "total_reviews",
+            "rating_breakdown": {"5": %, "4": %, "3": %, "2": %, "1": %},
+            "expert_reviews": [{"source", "rating", "summary"}]
+          },
+          "technical_specs": {
+            "platforms", "languages", "api", "security", "compliance"
+          },
+          "support": {
+            "channels", "response_time", "documentation_quality", "community"
+          },
+          "media": {
+            "logo", "screenshots", "videos", "diagrams"
+          }
+        }
+        ```
      
-     3. **Collect royalty-free images**
-        - Search Unsplash via Jina: `s.jina.ai/?q=TERM+unsplash`
-        - Scrape Unsplash pages for non-premium images
-        - Store image URLs in the JSON data
+     3. **Create comprehensive taxonomy archive pages**
+        
+        **For Category/Type taxonomy pages (e.g., /categories/crm-software/, /types/italian-restaurants/, /specialties/anxiety-therapy/):**
+        - Comprehensive overview of the category
+        - Complete buyer's/selection guide
+        - Key features to look for
+        - Common use cases and who needs this
+        - Price range analysis and what affects cost
+        - Industry trends and future outlook
+        - Comparison methodology explanation
+        - Top entries with detailed previews
+        - Quick comparison table
+        - FAQs about this category
+        - Related categories and how they differ
+        - Expert opinions and industry insights
+        - Glossary of category-specific terms
+        - Statistics and market data
+        - All entries in this category listed below with rich cards
+        
+        **For Location pages (e.g., /locations/new-york/):**
+        - Complete local market analysis
+        - Local regulations and requirements
+        - Average prices in this area vs national
+        - Transportation and parking information
+        - Neighborhood-by-neighborhood breakdown
+        - Local insurance providers accepted
+        - Emergency services in the area
+        - Community resources and support groups
+        - Local statistics and demographics
+        - All providers in this location with detailed cards
+        - Nearby locations for comparison
+        - Local events and workshops
+        
+        **For Combined taxonomy pages (e.g., /crm-software-for-startups/, /italian-restaurants-manhattan/, /anxiety-therapists-new-york/):**
+        - Everything from both individual taxonomies combined
+        - Specific local/niche context 
+        - Why this combination matters
+        - Unique considerations for this intersection
+        - Price analysis for this specific combination
+        - Top comparisons with scoring methodology
+        - Map visualization (if location-based)
+        - Availability/wait times analysis
+        - Quick filter and sort options
+        - All matching entries with rich information cards
+     
+     4. **Collect imagery**
+        - Product screenshots
+        - Logo variations
+        - Feature demonstration images
+        - Comparison charts and infographics
+        - Industry-relevant stock photos from Unsplash
+        - Create custom diagrams where needed
 
      ### Phase 2: Website Development
      1. **Start with local WordPress Docker environment**
@@ -25,7 +123,6 @@
         - Access at http://localhost
      
      2. **Build the custom theme with FULL SEO optimization**
-        - Create detailed, complex CSS (not simple/short)
         - Modern, clean, modular design
         - Implement all directory pages from JSON data
         - Add comprehensive animations and interactions
@@ -108,19 +205,18 @@
 
      ### SEO Page Structure Requirements
 
-     **IMPORTANT:** Do NOT use Rank Math during development. Focus on native SEO implementation.
      Rank Math will only be added at launch for Search Console submission.
 
-     Every page must have:
-     - **Meta Title**: Maximized to 60 characters with keywords
-     - **Meta Description**: Maximized to 160 characters with compelling copy
+     Every page should have:
+     - **Meta Title**: Optimized with keywords
+     - **Meta Description**: Compelling copy for click-through
      - **H1 Title**: Unique and keyword-rich
-     - **Page Content**: Minimum 300-500 words of unique, valuable content
+     - **Page Content**: Unique, valuable content
      - **Schema Markup**: LocalBusiness, Product, or Review schema as appropriate
      - **Open Graph tags**: For social sharing
-     - **Internal Links**: 3-5 contextual links to related pages
+     - **Internal Links**: Contextual links to related pages
 
-     Generate these page types for maximum ranking potential:
+     Generate these page types for ranking potential:
      - "Best [Product] in [City]" - for every city
      - "Top 10 [Category] in [State]" - for every state
      - "[Product] near me" - location-based pages
@@ -140,7 +236,7 @@
      Review form should include:
      - Overall star rating (1-5 stars)
      - Category-specific ratings (e.g., Quality, Service, Value, Location)
-     - Written review with minimum 50 characters
+     - Written review section
      - Photo upload option
      - "Would you recommend?" Yes/No
      - Verified purchase/visit checkbox
@@ -163,7 +259,6 @@
      **Important Research Guidelines:**
      - Create detailed JSON for each directory page
      - If a page 404s or doesn't scrape properly, retry the scrape
-     - DO NOT use Jina to scrape CSS from design sites
 
      ### Finding Royalty-Free Images
 
@@ -213,35 +308,6 @@
      }
      ```
 
-     ### CSS Development Guidelines
-
-     **IMPORTANT:** Create extremely detailed and complex CSS files that are well-thought-out:
-
-     - Don't write short, simple CSS - make it comprehensive
-     - Include detailed animations and transitions
-     - Add hover states, focus states, and active states
-     - Create responsive breakpoints for all screen sizes
-     - Include print styles and accessibility features
-     - Use CSS custom properties for theming
-     - Add detailed comments explaining complex sections
-     - Implement sophisticated grid and flexbox layouts
-     - Include fallbacks for older browsers
-
-     Example of detailed CSS approach:
-     ```css
-     /* Component: Directory Card
-        Purpose: Display individual directory entries
-        States: default, hover, active, disabled, loading
-        Breakpoints: mobile-first approach with 5 breakpoints
-        Accessibility: WCAG 2.1 AA compliant */
-     
-     .directory-card {
-       /* Base styles with extensive properties */
-       /* Multiple transition effects */
-       /* Complex shadow systems */
-       /* Detailed spacing scales */
-     }
-     ```
 
      ## 🚀 Quick Deploy Workflow
 
