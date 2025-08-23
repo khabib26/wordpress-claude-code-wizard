@@ -1,5 +1,106 @@
     # WordPress Claude Code Wizard - Complete Workflow & Development Guide
 
+     ## 📚 Directory Website Development
+
+     ### Research Phase with Jina AI
+
+     When building directory websites, use Jina AI for comprehensive research:
+
+     ```bash
+     # Search for information (use s.jina.ai)
+     curl "https://s.jina.ai/?q=YOUR_SEARCH_TERM" \
+       -H "Authorization: Bearer $JINA_API_KEY"
+
+     # Scrape individual pages (use r.jina.ai)
+     curl "https://r.jina.ai/https://example.com/page" \
+       -H "Authorization: Bearer $JINA_API_KEY"
+     ```
+
+     **Important Research Guidelines:**
+     - Create detailed JSON for each directory page
+     - Store research in `/research/[technology]/page1/`, `/page2/`, etc.
+     - Each page gets its own .md file with comprehensive information
+     - If a page 404s or doesn't scrape properly, retry the scrape
+     - DO NOT use Jina to scrape CSS from design sites
+
+     ### Finding Royalty-Free Images
+
+     ```bash
+     # Search for Unsplash images using Jina
+     curl "https://s.jina.ai/?q=YOUR_IMAGE_DESCRIPTION+unsplash" \
+       -H "Authorization: Bearer $JINA_API_KEY"
+     
+     # Then scrape the found Unsplash pages for non-premium images
+     curl "https://r.jina.ai/https://unsplash.com/photos/..." \
+       -H "Authorization: Bearer $JINA_API_KEY"
+     ```
+
+     ### Directory Page JSON Format
+
+     Each directory entry should have comprehensive data:
+
+     ```json
+     {
+       "id": "unique-identifier",
+       "name": "Company/Service Name",
+       "category": "Technology Category",
+       "description": "Detailed description...",
+       "features": ["feature1", "feature2", "..."],
+       "pricing": {
+         "model": "subscription/one-time/freemium",
+         "tiers": [...]
+       },
+       "images": {
+         "logo": "url-from-unsplash",
+         "screenshots": ["url1", "url2"],
+         "hero": "hero-image-url"
+       },
+       "metadata": {
+         "founded": "year",
+         "headquarters": "location",
+         "employees": "range",
+         "funding": "amount"
+       },
+       "links": {
+         "website": "url",
+         "documentation": "url",
+         "pricing": "url"
+       },
+       "tags": ["tag1", "tag2"],
+       "lastUpdated": "timestamp"
+     }
+     ```
+
+     ### CSS Development Guidelines
+
+     **IMPORTANT:** Create extremely detailed and complex CSS files that are well-thought-out:
+
+     - Don't write short, simple CSS - make it comprehensive
+     - Include detailed animations and transitions
+     - Add hover states, focus states, and active states
+     - Create responsive breakpoints for all screen sizes
+     - Include print styles and accessibility features
+     - Use CSS custom properties for theming
+     - Add detailed comments explaining complex sections
+     - Implement sophisticated grid and flexbox layouts
+     - Include fallbacks for older browsers
+
+     Example of detailed CSS approach:
+     ```css
+     /* Component: Directory Card
+        Purpose: Display individual directory entries
+        States: default, hover, active, disabled, loading
+        Breakpoints: mobile-first approach with 5 breakpoints
+        Accessibility: WCAG 2.1 AA compliant */
+     
+     .directory-card {
+       /* Base styles with extensive properties */
+       /* Multiple transition effects */
+       /* Complex shadow systems */
+       /* Detailed spacing scales */
+     }
+     ```
+
      ## 🚀 Quick Deploy Workflow
 
      When a user clones this repository and wants to deploy WordPress to Digital Ocean,
@@ -8,7 +109,7 @@
      ```bash
      # 1. Setup environment
      cp .env.example .env
-     # User must edit .env and add DO_API_TOKEN
+     # User must edit .env and add DO_API_TOKEN and JINA_API_KEY
 
      # 2. Install Python dependencies
      pip3 install python-dotenv requests
