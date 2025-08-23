@@ -4,20 +4,118 @@
 
      When building and deploying a directory website, follow this exact workflow:
 
-     ### Phase 1: Research & Data Collection
-     1. **Use Jina AI to research the topic**
-        - Search for companies/tools using `s.jina.ai`
-        - Scrape individual pages with `r.jina.ai`
-        - Retry any failed scrapes
+     ### Phase 1: Deep Research & Comprehensive Data Collection
      
-     2. **Create comprehensive JSON data**
-        - One detailed JSON for each directory entry
-        - Each entry should have extensive information
+     **GOAL: Create pages so information-rich that visitors never need to leave your site**
      
-     3. **Collect royalty-free images**
-        - Search Unsplash via Jina: `s.jina.ai/?q=TERM+unsplash`
-        - Scrape Unsplash pages for non-premium images
-        - Store image URLs in the JSON data
+     1. **Research each individual entry exhaustively using Jina AI**
+        - Scrape the company's main website completely
+        - Find and scrape their pricing pages, feature lists, documentation
+        - Search for reviews, comparisons, alternatives
+        - Gather technical specifications, integrations, use cases
+        - Find case studies, success stories, testimonials
+        - Collect founder information, company history, funding details
+        - Get support options, contact methods, social media links
+        - Retry any failed scrapes until you have EVERYTHING
+     
+     2. **Build massive JSON datasets for each entry**
+        Each individual page JSON should contain:
+        ```json
+        {
+          "basics": {
+            "name", "tagline", "description" (500+ words),
+            "founded", "headquarters", "employees", "funding"
+          },
+          "detailed_features": [
+            {"name", "description" (100+ words), "category", "importance"}
+          ],
+          "pricing": {
+            "model", "free_tier", "starter_price", "tiers": [
+              {"name", "price", "features" (20+), "limits", "best_for"}
+            ]
+          },
+          "use_cases": [
+            {"title", "description" (200+ words), "industry", "company_size"}
+          ],
+          "pros_cons": {
+            "pros": [{"title", "explanation" (50+ words)}],
+            "cons": [{"title", "explanation" (50+ words)}]
+          },
+          "integrations": [
+            {"name", "type", "description", "documentation_url"}
+          ],
+          "alternatives": [
+            {"name", "comparison" (100+ words), "when_to_choose"}
+          ],
+          "reviews": {
+            "average_rating", "total_reviews",
+            "rating_breakdown": {"5": %, "4": %, "3": %, "2": %, "1": %},
+            "expert_reviews": [{"source", "rating", "summary" (200+ words)}]
+          },
+          "technical_specs": {
+            "platforms", "languages", "api", "security", "compliance"
+          },
+          "support": {
+            "channels", "response_time", "documentation_quality", "community"
+          },
+          "media": {
+            "logo", "screenshots" (10+), "videos", "diagrams"
+          }
+        }
+        ```
+     
+     3. **Create comprehensive taxonomy archive pages**
+        
+        **For Category/Type taxonomy pages (e.g., /categories/crm-software/, /types/italian-restaurants/, /specialties/anxiety-therapy/):**
+        - Comprehensive overview of the category (1000+ words)
+        - Complete buyer's/selection guide
+        - Key features to look for
+        - Common use cases and who needs this
+        - Price range analysis and what affects cost
+        - Industry trends and future outlook
+        - Comparison methodology explanation
+        - Top 10-20 entries with detailed previews
+        - Quick comparison table
+        - 20-30 FAQs about this category
+        - Related categories and how they differ
+        - Expert opinions and industry insights
+        - Glossary of category-specific terms
+        - Statistics and market data
+        - ALL entries in this category listed below with rich cards
+        
+        **For Location pages (e.g., /locations/new-york/):**
+        - Complete local market analysis (1000+ words)
+        - Local regulations and requirements
+        - Average prices in this area vs national
+        - Transportation and parking information
+        - Neighborhood-by-neighborhood breakdown
+        - Local insurance providers accepted
+        - Emergency services in the area
+        - Community resources and support groups
+        - Local statistics and demographics
+        - ALL providers in this location with detailed cards
+        - Nearby locations for comparison
+        - Local events and workshops
+        
+        **For Combined taxonomy pages (e.g., /crm-software-for-startups/, /italian-restaurants-manhattan/, /anxiety-therapists-new-york/):**
+        - Everything from both individual taxonomies combined
+        - Specific local/niche context 
+        - Why this combination matters (e.g., "Why startups need different CRM")
+        - Unique considerations for this intersection
+        - Price analysis for this specific combination
+        - Top 10 detailed comparisons with scoring methodology
+        - Map visualization (if location-based)
+        - Availability/wait times analysis
+        - Quick filter and sort options
+        - ALL matching entries with rich information cards
+     
+     4. **Collect extensive imagery**
+        - Product screenshots (10+ per entry)
+        - Logo variations
+        - Feature demonstration images
+        - Comparison charts and infographics
+        - Industry-relevant stock photos from Unsplash
+        - Create custom diagrams where needed
 
      ### Phase 2: Website Development
      1. **Start with local WordPress Docker environment**
