@@ -6,6 +6,12 @@
 
     # WordPress Claude Code Wizard - Complete Workflow & Development Guide
 
+     ## ⚠️ CRITICAL REQUIREMENT: ZERO 404 ERRORS
+     
+     **EVERY website you build MUST have ZERO 404 errors. Use Playwright MCP to verify EVERY SINGLE link.**
+     **Headers and footers ALWAYS have broken links if you don't check them systematically.**
+     **Do not deliver a website until Playwright confirms every link works.**
+
      ## 🎯 Main Workflow Process
 
      When building and deploying a directory website, follow this exact workflow:
@@ -190,84 +196,129 @@
         - Test review submission
         - Test contact form
 
-     ### Phase 2.5: Automated Verification with Playwright MCP
+     ### Phase 2.5: MANDATORY Playwright Verification - CHECK EVERY SINGLE LINK
      
-     **CRITICAL: Use the Playwright MCP to verify EVERY page works before proceeding**
+     **⛔ STOP! DO NOT SKIP THIS! YOU MUST CHECK EVERY SINGLE LINK WITH PLAYWRIGHT!**
      
-     The Playwright MCP is pre-configured in this project. Use it to automatically verify:
+     **THE WEBSITE IS NOT COMPLETE UNTIL PLAYWRIGHT VERIFIES ZERO 404s**
      
-     1. **Homepage Verification**
-        ```
-        Use playwright mcp to navigate to http://localhost and verify:
-        - Page loads without 404
-        - Header navigation menu is visible and contains all expected links
-        - Footer is present with all links
-        - No PHP errors or warnings displayed
-        - Content is visible (not blank page)
-        ```
+     Use the pre-configured Playwright MCP to verify EVERY link works. Do not just check "a few" links.
+     Do not just check "some" pages. CHECK THEM ALL. The header and footer ALWAYS have broken links
+     if you don't verify them properly!
      
-     2. **Test Every Directory Entry Page**
+     1. **MANDATORY: Extract and Test EVERY Header Link**
         ```
         Use playwright mcp to:
-        - Navigate to each individual directory entry (e.g., /companies/company-name/)
-        - Verify each page loads with proper template (not 404)
-        - Check that custom post type content displays
-        - Verify breadcrumbs work
-        - Check that related entries appear
+        1. Navigate to http://localhost
+        2. Extract ALL href attributes from the header navigation
+        3. Create a list of EVERY SINGLE link found
+        4. Visit EACH link one by one
+        5. Verify EACH loads without 404
+        6. If ANY link returns 404, FIX IT IMMEDIATELY
+        
+        Example: If header has Home, About, Services, Blog, Contact, Categories dropdown with 
+        10 categories, Location dropdown with 20 locations - that's 35 links to check. 
+        CHECK ALL 35. Not 5. Not 10. ALL 35.
         ```
      
-     3. **Test All Taxonomy Archive Pages**
-        ```
-        Use playwright mcp to verify these critical pages:
-        - Each category page (e.g., /categories/crm-software/)
-        - Each location page (e.g., /locations/new-york/)
-        - Each combined taxonomy page (e.g., /crm-software-new-york/)
-        - Verify pagination works if more than 10 entries
-        - Check filter/sort functionality
-        ```
-     
-     4. **Test Navigation Menu Links**
+     2. **MANDATORY: Extract and Test EVERY Footer Link**
         ```
         Use playwright mcp to:
-        - Click every link in the header menu
-        - Verify each link goes to a working page (not 404)
-        - Test dropdown menus if present
-        - Click all footer links
-        - Verify mobile menu works
+        1. Scroll to footer
+        2. Extract ALL href attributes from the footer
+        3. Visit EVERY SINGLE footer link
+        4. Do not assume they work - TEST THEM
+        5. Common broken footer links: Privacy Policy, Terms, Sitemap
+        6. CREATE these pages if they don't exist
         ```
      
-     5. **Test Critical Functionality**
+     3. **MANDATORY: Test EVERY Directory Entry**
         ```
-        Use playwright mcp to:
-        - Submit the contact form and verify it processes
-        - Submit a review on a directory entry
-        - Use the search functionality
-        - Test any filtering or sorting options
-        ```
-     
-     6. **Generate Verification Report**
-        ```
-        After testing with Playwright, create a summary:
-        - Total pages tested
-        - Any 404 errors found (fix immediately)
-        - Any template issues (pages not using correct template)
-        - Any functionality issues
-        - Screenshot of homepage
-        - Screenshot of a category page
-        - Screenshot of an individual entry page
+        DO NOT test "a few examples" - test EVERY SINGLE ONE:
+        - Get the full list of all directory entries
+        - Visit each one: /companies/company-1/, /companies/company-2/, etc.
+        - If you have 50 entries, test all 50
+        - Each must load with proper content, not 404
         ```
      
-     **If ANY pages return 404 or don't display correctly:**
-     - Fix the issue immediately
-     - Re-run Playwright verification
-     - Do not proceed to deployment until ALL pages work
+     4. **MANDATORY: Test EVERY Taxonomy Page**
+        ```
+        Test EVERY SINGLE taxonomy page that should exist:
+        - EVERY category: /categories/[slug]/ for each category
+        - EVERY location: /locations/[slug]/ for each location  
+        - EVERY tag: /tags/[slug]/ for each tag
+        - EVERY combination page if they exist
+        - Do not test "some" - test EVERY SINGLE ONE
+        ```
      
-     **Common issues to check:**
-     - Permalinks not flushed (wp rewrite flush)
-     - Custom post types not registered properly
-     - Taxonomy terms not created
-     - Menu items not added programmatically
-     - Template files missing or named incorrectly
+     5. **MANDATORY: Systematic Link Extraction and Testing**
+        ```
+        Use playwright mcp to run this systematic check:
+        
+        // Extract ALL links from the site
+        const allLinks = await page.evaluate(() => {
+          return Array.from(document.querySelectorAll('a[href]'))
+            .map(a => a.href)
+            .filter(href => href.startsWith('http://localhost'));
+        });
+        
+        // Test EVERY SINGLE link
+        for (const link of allLinks) {
+          await page.goto(link);
+          // Check for 404 or error
+          // Log any broken links
+        }
+        
+        If you find 10 links, test 10.
+        If you find 100 links, test 100.
+        If you find 500 links, test 500.
+        TEST THEM ALL.
+        ```
+     
+     6. **FIX ALL BROKEN LINKS IMMEDIATELY**
+        ```
+        For EVERY 404 found:
+        - Create the missing page
+        - Or fix the incorrect link
+        - Re-test with Playwright to confirm it's fixed
+        - Do not move on until ZERO 404s exist
+        ```
+     
+     7. **Fix Every Broken Link Found**
+        ```
+        Whatever links are in the header/footer:
+        - Test them ALL with Playwright
+        - If they return 404, either fix the link or create the page
+        - Common broken links: About, Contact, Privacy, Terms, Blog, etc.
+        - Do not assume any link works - TEST IT
+        ```
+     
+     8. **Final Verification Report**
+        ```
+        Only after testing EVERY link, generate report:
+        - Total links found in header: [number]
+        - Total links found in footer: [number]
+        - Total directory entries tested: [number]
+        - Total taxonomy pages tested: [number]
+        - Total unique URLs tested: [number]
+        - 404 errors found and fixed: [list]
+        - Final status: MUST be "Zero 404s found"
+        ```
+     
+     **❌ UNACCEPTABLE:**
+     - "I tested a few links and they work"
+     - "I checked some pages"
+     - "The main pages seem to work"
+     - "I verified the important links"
+     
+     **✅ REQUIRED:**
+     - "I tested all 47 header links - all working"
+     - "I tested all 23 footer links - all working"
+     - "I tested all 85 directory entries - all working"
+     - "I tested all 35 taxonomy pages - all working"
+     - "Total: 190 unique URLs tested, zero 404s"
+     
+     **THE WEBSITE IS NOT COMPLETE UNTIL EVERY SINGLE LINK WORKS**
 
      ### Phase 3: Deployment to Digital Ocean
      1. **Setup infrastructure**
