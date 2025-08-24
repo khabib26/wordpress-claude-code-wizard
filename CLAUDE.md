@@ -6,15 +6,32 @@
 
     # WordPress Claude Code Wizard - Complete Workflow & Development Guide
 
+     ## 🚨 MANDATORY: ONE-SHOT COMPLETE EXECUTION
+     
+     **YOU MUST COMPLETE THE ENTIRE WORKFLOW IN ONE SHOT. DO NOT STOP PARTWAY.**
+     **DO NOT deliver partial work. DO NOT stop after Phase 1. DO NOT skip steps.**
+     **COMPLETE MEANS: Research → Build Website → Test with Playwright → Fix ALL issues → DONE**
+     **The website must be FULLY FUNCTIONAL at http://localhost before you stop.**
+     
+     **DO NOT REPORT BACK TO THE USER OR ASK THEM ANYTHING UNTIL YOU HAVE:**
+     - A fully built website running at http://localhost
+     - All directory entries created and populated
+     - All taxonomy pages working
+     - Navigation menus fully populated
+     - ZERO 404 errors verified by Playwright
+     - Ready to run ./migrate_now.sh
+     
+     **The user hired you to BUILD A WEBSITE, not to show research or ask questions.**
+
      ## ⚠️ CRITICAL REQUIREMENT: ZERO 404 ERRORS
      
      **EVERY website you build MUST have ZERO 404 errors. Use Playwright MCP to verify EVERY SINGLE link.**
      **Headers and footers ALWAYS have broken links if you don't check them systematically.**
      **Do not deliver a website until Playwright confirms every link works.**
 
-     ## 🎯 Main Workflow Process
+     ## 🎯 Main Workflow Process - COMPLETE ALL PHASES
 
-     When building and deploying a directory website, follow this exact workflow:
+     When building a directory website, you MUST complete ALL phases in one continuous workflow:
 
      ### Phase 1: Deep Research & Comprehensive Data Collection
      
@@ -129,7 +146,10 @@
         - Industry-relevant stock photos from Unsplash
         - Create custom diagrams where needed
 
-     ### Phase 2: Website Development
+     ### Phase 2: Website Development (THIS IS NOT OPTIONAL - YOU MUST BUILD THE WEBSITE)
+     
+     **DO NOT STOP AFTER RESEARCH. BUILD THE ACTUAL WEBSITE NOW.**
+     
      1. **Start with local WordPress Docker environment**
         - Run `docker-compose up -d`
         - Access at http://localhost
@@ -319,6 +339,17 @@
      - "Total: 190 unique URLs tested, zero 404s"
      
      **THE WEBSITE IS NOT COMPLETE UNTIL EVERY SINGLE LINK WORKS**
+
+     ## ✅ ONLY NOW REPORT BACK TO THE USER
+     
+     **NOW that you have a COMPLETE, WORKING website with ZERO 404s, you can report:**
+     - "Website complete and verified at http://localhost"
+     - "All [X] directory entries created and tested"
+     - "All [X] taxonomy pages working"
+     - "Playwright verified [X] total links - ZERO 404 errors"
+     - "Ready for deployment with ./migrate_now.sh"
+     
+     **If you haven't done ALL of the above, GO BACK and finish the website.**
 
      ### Phase 3: Deployment to Digital Ocean
      1. **Setup infrastructure**
